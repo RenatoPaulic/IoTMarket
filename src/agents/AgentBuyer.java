@@ -42,9 +42,8 @@ public class AgentBuyer implements AuctionAgent {
 
     private String auctionTopic;
     private AuctionProtocol auctionProtocol;
-    private String kafkaServer;
 
-    public AgentBuyer(AuctionProtocol auctionProtocol, String auctionTopic, String kafkaServer){
+    public AgentBuyer(AuctionProtocol auctionProtocol, String auctionTopic){
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource("log4j.properties");
@@ -53,7 +52,6 @@ public class AgentBuyer implements AuctionAgent {
 
         this.auctionTopic = auctionTopic;
         this.auctionProtocol = auctionProtocol;
-        this.kafkaServer = kafkaServer;
 
         Agent.logger.info("--------------------- STARTING BUYER AGENT ---------------------" );
 
@@ -64,7 +62,7 @@ public class AgentBuyer implements AuctionAgent {
     public void start(){
 
         Agent.logger.info("Buyer agent: Initializing auction tasks" );
-        auctionProtocol.initAuctionBehaviors(auctionTopic, kafkaServer);
+        auctionProtocol.initAuctionBehaviors(auctionTopic);
 
     }
 
@@ -218,7 +216,7 @@ public class AgentBuyer implements AuctionAgent {
 
         AuctionProtocol auctionProtocol = new BasicAuctionProtocol(properties,auctionSubtype, auction);
 
-        AgentBuyer agentBuyer = new AgentBuyer(auctionProtocol, properties.get(AuctionProperties.TOPIC).toString(), parameters[2]);
+        AgentBuyer agentBuyer = new AgentBuyer(auctionProtocol, properties.get(AuctionProperties.TOPIC).toString());
 
         return agentBuyer;
 

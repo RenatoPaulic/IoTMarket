@@ -57,7 +57,6 @@ public class Agent {
                     // set up buyer agent - default parameters, auction parameters and specific parameters
                     AgentBuyer agentBuyer = AgentBuyer.setUpBuyerAgent(args);
 
-                    setUpKafka(args[1], args[2]);
 
                     // start auction
                     agentBuyer.start();
@@ -75,8 +74,7 @@ public class Agent {
                     // set up seller agent
                     AgentSeller agentSeller = AgentSeller.setUpSellerAgent(args);
 
-                    // set up kafka producer and controller
-                    setUpKafka(args[1], args[2]);
+
 
                     // start listening for auctions
                     agentSeller.start();
@@ -94,8 +92,6 @@ public class Agent {
                     // set up seller agent
                     AgentHelper agentHelper = AgentHelper.setUpHelperAgent(args);
 
-                    // set up kafka producer and controller
-                    setUpKafka(args[1], args[2]);
 
                     // start listening for auctions
                     agentHelper.start();
@@ -114,17 +110,7 @@ public class Agent {
 
 
 
-    /**
-     * Method that set up all classes that uses Apache Kafka
-     * @param zookeeperServer represent zookeeper server connection string(<host_name>:<port>)
-     * @param kafkaServer  represent kafka server connection string(<host_name>:<port>)
-     */
-   public static void setUpKafka(String zookeeperServer, String kafkaServer){
 
-       TopicController.getInstance().initTopicController(zookeeperServer, kafkaServer);
-       MessageProducer.getInstance().initMessageProducer(kafkaServer);
-
-   }
 
    public static void end(){
 

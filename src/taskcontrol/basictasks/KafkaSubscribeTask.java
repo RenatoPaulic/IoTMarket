@@ -26,7 +26,7 @@ public class KafkaSubscribeTask extends Thread implements ITask, ISubscribeTask 
 
     private List<AuctionTask> tasks;
 
-    private String kafkaServer;
+    private String kafkaServer = Agent.kafkaServer;
 
     private String[] marks;
 
@@ -37,12 +37,11 @@ public class KafkaSubscribeTask extends Thread implements ITask, ISubscribeTask 
     /**
      * KafkaSubscribeTask constructor that provides subscription to multiple topics
      * @param taskExecutor  reference to TaskExecutor class, for task result notification
-     * @param kafkaServer connection string for kafka server
      * @param topicList  topics list to subscribe
      * @param startPoint  offset start point for reading message from topic
      * @param marks  represent auction messages mark that will be filtered while receiving message
      */
-    public KafkaSubscribeTask(TaskExecutor taskExecutor, String kafkaServer, List<String> topicList, OffsetStart startPoint, String ... marks){
+    public KafkaSubscribeTask(TaskExecutor taskExecutor,  List<String> topicList, OffsetStart startPoint, String ... marks){
 
         this.topicList = topicList;
         this.taskExecutor = taskExecutor;
@@ -50,7 +49,6 @@ public class KafkaSubscribeTask extends Thread implements ITask, ISubscribeTask 
 
         this.marks = marks;
 
-        this.kafkaServer = kafkaServer;
 
         tasks = new ArrayList<>();
 
@@ -60,12 +58,11 @@ public class KafkaSubscribeTask extends Thread implements ITask, ISubscribeTask 
     /**
      * KafkaSubscribeTask constructor that provides subscription to single topic
      * @param taskExecutor  reference to TaskExecutor class, for task result notification
-     * @param kafkaServer connection string for kafka server
      * @param topic  topic to subscribe
      * @param startPoint  offset start point for reading message from topic
      * @param marks  represent auction messages mark that will be filtered while receiving message
      */
-    public KafkaSubscribeTask(TaskExecutor taskExecutor, String kafkaServer, String topic, OffsetStart startPoint, String ... marks){
+    public KafkaSubscribeTask(TaskExecutor taskExecutor,  String topic, OffsetStart startPoint, String ... marks){
 
         this.topic = topic;
         this.taskExecutor = taskExecutor;
@@ -73,8 +70,6 @@ public class KafkaSubscribeTask extends Thread implements ITask, ISubscribeTask 
 
         this.marks = marks;
 
-
-        this.kafkaServer = kafkaServer;
 
         tasks = new ArrayList<>();
 

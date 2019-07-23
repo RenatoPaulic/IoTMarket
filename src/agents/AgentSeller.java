@@ -43,16 +43,15 @@ public class AgentSeller implements AuctionAgent {
 
 
     private List<String> topicList;
-    private String kafkaServer;
 
-    public AgentSeller(List<String> topicList, String kafkaServer){
+
+    public AgentSeller(List<String> topicList){
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource("log4j.properties");
         PropertyConfigurator.configure(url);
 
         this.topicList = topicList;
-        this.kafkaServer = kafkaServer;
 
         logger.info( "Starting AGENT SELLER" );
     }
@@ -63,8 +62,8 @@ public class AgentSeller implements AuctionAgent {
 
         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
-        ITask task1 = new KafkaSubscribeTask(taskExecutor,kafkaServer, topicList, OffsetStart.LATEST, "B", "H" );
-        ITask task2 = new MainListenerTask(taskExecutor,(ISubscribeTask) task1, kafkaServer);
+        ITask task1 = new KafkaSubscribeTask(taskExecutor, topicList, OffsetStart.LATEST, "B", "H" );
+        ITask task2 = new MainListenerTask(taskExecutor,(ISubscribeTask) task1);
 
         taskExecutor.addTask(task1);
         taskExecutor.addTask(task2);
@@ -107,7 +106,7 @@ public class AgentSeller implements AuctionAgent {
         }
 
 
-        return new AgentSeller(topicList, args[2]);
+        return new AgentSeller(topicList);
 
 
 

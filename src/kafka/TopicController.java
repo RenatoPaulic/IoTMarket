@@ -40,6 +40,8 @@ public class TopicController {
 
     private TopicController() {
 
+        buildDefaultClientConfig();
+
     }
 
     /**
@@ -158,14 +160,7 @@ public class TopicController {
 
     }
 
-    public void initTopicController(String zookeeperServer, String kafkaServer){
 
-        this.zookeeperServer = zookeeperServer;
-        this.kafkaServer = kafkaServer;
-
-        buildDefaultClientConfig();
-
-    }
 
 
 

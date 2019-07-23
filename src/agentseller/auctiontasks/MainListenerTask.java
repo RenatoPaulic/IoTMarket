@@ -27,13 +27,12 @@ public class MainListenerTask implements AuctionTask, ITask {
     private TaskExecutor taskExecutor;
     private ISubscribeTask subscribeTask;
 
-    private String kafkaServer;
 
-    public MainListenerTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, String kafkaServer){
+    public MainListenerTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask){
 
         this.taskExecutor = taskExecutor;
         this.subscribeTask = subscribeTask;
-        this.kafkaServer = kafkaServer;
+
 
         auctions = new ArrayList<>();
 
@@ -63,7 +62,7 @@ public class MainListenerTask implements AuctionTask, ITask {
         // if auction_start message - calculate utilities and check participation (in  new thread)
         if (auctionMessage.getHeader().equals("auction_start")) {
 
-            new AuctionStartThread(auctionMessage, auctions, kafkaServer).start();
+            new AuctionStartThread(auctionMessage, auctions).start();
 
         }
 

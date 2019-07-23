@@ -111,18 +111,18 @@ public class BasicAuctionProtocol implements AuctionProtocol {
     }
 
     @Override
-    public void initAuctionBehaviors(String topic, String kafkaServer) {
+    public void initAuctionBehaviors(String topic) {
 
         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
         ITask task1 = new TopicCreateTask(taskExecutor, buyerTopic);
-        ITask task2 = new KafkaSubscribeTask(taskExecutor,kafkaServer, buyerTopic, OffsetStart.LATEST, "S");
+        ITask task2 = new KafkaSubscribeTask(taskExecutor, buyerTopic, OffsetStart.LATEST, "S");
         ITask task3 = new MessageSendTask(taskExecutor,topic,auctionStartMessage);
         ITask task4 = new AuctionNegotiationTask(taskExecutor, (ISubscribeTask) task2, auction);
         ITask task5 = new TopicCreateTask(taskExecutor, "input-" + buyerTopic);
         ITask task6 = new TopicCreateTask(taskExecutor, "output-" + buyerTopic);
-        ITask task7 = new KafkaSubscribeTask(taskExecutor, kafkaServer, "output-" + buyerTopic, OffsetStart.EARLIEST, "S");
-        ITask task8 = new CreateBasicStreamTask(taskExecutor, kafkaServer, buyerTopic );
+        ITask task7 = new KafkaSubscribeTask(taskExecutor, "output-" + buyerTopic, OffsetStart.EARLIEST, "S");
+        ITask task8 = new CreateBasicStreamTask(taskExecutor,  buyerTopic );
         ITask task9 = new StreamNegotiationTask(taskExecutor, (ISubscribeTask) task2, auctionStream);
     //    ITask task10 = new TopicDeleteTask(taskExecutor,buyerTopic);
     //    ITask task11 = new TopicDeleteTask(taskExecutor, "input-" + buyerTopic);

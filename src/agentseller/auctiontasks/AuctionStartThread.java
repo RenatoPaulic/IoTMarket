@@ -41,13 +41,13 @@ public class AuctionStartThread extends Thread {
 
     private AuctionMessage auctionMessage;
     private List<Auction> auctions;
-    private String kafkaServer;
 
-    public AuctionStartThread(AuctionMessage auctionMessage, List<Auction> auctions, String kafkaServer){
+
+    public AuctionStartThread(AuctionMessage auctionMessage, List<Auction> auctions){
 
         this.auctionMessage = auctionMessage;
         this.auctions = auctions;
-        this.kafkaServer = kafkaServer;
+
 
     }
 
@@ -176,7 +176,7 @@ public class AuctionStartThread extends Thread {
 
 
         ITask task0 = new StreamListenerTask(taskExecutor, auction.getTopic());
-        ITask task1 = new KafkaSubscribeTask(taskExecutor, kafkaServer, auction.getBuyerUUID(), OffsetStart.LATEST, "B");
+        ITask task1 = new KafkaSubscribeTask(taskExecutor, auction.getBuyerUUID(), OffsetStart.LATEST, "B");
         ITask task2 = new AuctionNegotiationTask(taskExecutor, (ISubscribeTask) task1, auction);
         ITask task3 = new ProcessStreamTask(taskExecutor,(ISubscribeTask)task0, auction);
 
@@ -203,7 +203,7 @@ public class AuctionStartThread extends Thread {
         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
         ITask task0 = new StreamListenerTask(taskExecutor, "Pollution");
-        ITask task1 = new KafkaSubscribeTask(taskExecutor, kafkaServer,  helperTopic, OffsetStart.EARLIEST, "H");
+        ITask task1 = new KafkaSubscribeTask(taskExecutor,  helperTopic, OffsetStart.EARLIEST, "H");
         ITask task2 = new MessageSendTask(taskExecutor, helperTopic, mess);
         ITask task3 = new HelperNegotiationTask( taskExecutor, (ISubscribeTask) task1, sellerUUID, areaAuction.getSensorsInArea());
         ITask task4 = new ProcessHelperStreamTask(taskExecutor, (ISubscribeTask) task0, (HelperNegotiationTask) task3, auctionMessage.getSender(), 20000);

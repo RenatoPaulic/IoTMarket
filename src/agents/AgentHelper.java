@@ -41,17 +41,16 @@ public class AgentHelper implements AuctionAgent {
 
 
     private List<String> topicList;
-    private String kafkaServer;
 
 
-    public AgentHelper(String kafkaServer, List<String> topicList ){
+
+    public AgentHelper( List<String> topicList ){
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource("log4j.properties");
         PropertyConfigurator.configure(url);
 
         this.topicList = topicList;
-        this.kafkaServer = kafkaServer;
 
 
         Agent.logger.info("Helper agent " + "starting");
@@ -64,8 +63,8 @@ public class AgentHelper implements AuctionAgent {
 
         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
-        ITask task1 = new KafkaSubscribeTask(taskExecutor, kafkaServer, topicList,OffsetStart.LATEST, "B");
-        ITask task2 = new MainLoopTask(taskExecutor,(ISubscribeTask) task1, kafkaServer);
+        ITask task1 = new KafkaSubscribeTask(taskExecutor, topicList,OffsetStart.LATEST, "B");
+        ITask task2 = new MainLoopTask(taskExecutor,(ISubscribeTask) task1);
 
         taskExecutor.addTask(task1);
         taskExecutor.addTask(task2);
@@ -94,7 +93,7 @@ public class AgentHelper implements AuctionAgent {
 
         HelperProperties.getInstance().init(auctionStrategy, args[3], Integer.parseInt(args[5]));
 
-        return new AgentHelper( args[2], topicList);
+        return new AgentHelper( topicList);
 
 
     }

@@ -13,7 +13,6 @@ public interface AuctionProtocol {
      * Method witch define protocol, defining behaviours and tasks that
      * will be executing
      * @param topic head topic name
-     * @param kafkaServer kafka server connection string
      */
-    void initAuctionBehaviors(String topic, String kafkaServer);
+    void initAuctionBehaviors(String topic);
 }

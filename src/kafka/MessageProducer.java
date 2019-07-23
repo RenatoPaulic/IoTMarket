@@ -21,7 +21,7 @@ public class MessageProducer {
 
     private String kafkaServer = Agent.kafkaServer;
 
-    private MessageProducer(){  }
+    private MessageProducer(){ makeProducer(); }
 
 
     /**
@@ -57,12 +57,7 @@ public class MessageProducer {
 
     }
 
-    public void initMessageProducer(String kafkaServer){
 
-        this.kafkaServer = kafkaServer;
-        makeProducer();
-
-    }
 
     public void shutDown(){
 

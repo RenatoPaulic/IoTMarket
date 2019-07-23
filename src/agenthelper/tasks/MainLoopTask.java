@@ -33,14 +33,13 @@ public class MainLoopTask implements AuctionTask, ITask {
 
     private TaskExecutor taskExecutor;
     private ISubscribeTask subscribeTask;
-    private String kafkaServer;
 
 
-    public MainLoopTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, String kafkaServer){
+
+    public MainLoopTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask){
 
         this.taskExecutor = taskExecutor;
         this.subscribeTask = subscribeTask;
-        this.kafkaServer = kafkaServer;
 
 
         auctionContainers = new ArrayList<>();
@@ -92,9 +91,9 @@ public class MainLoopTask implements AuctionTask, ITask {
                         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
                         ITask task1 = new TopicCreateTask(taskExecutor, helperTopic);
-                        ITask task2 = new KafkaSubscribeTask(taskExecutor, kafkaServer, helperTopic, OffsetStart.EARLIEST, "S");
+                        ITask task2 = new KafkaSubscribeTask(taskExecutor,  helperTopic, OffsetStart.EARLIEST, "S");
                         ITask task3 = new AuctionMakingTask(auctionContainer, taskExecutor, (ISubscribeTask) task2, 5000);
-                        ITask task4 = new KafkaSubscribeTask(taskExecutor, kafkaServer, auctionTopic, OffsetStart.EARLIEST, "B");
+                        ITask task4 = new KafkaSubscribeTask(taskExecutor,  auctionTopic, OffsetStart.EARLIEST, "B");
                         ITask task5 = new RoundTask(taskExecutor, (ISubscribeTask) task4, auctionContainer);
                    //     ITask task6 = new TopicDeleteTask(taskExecutor, helperTopic);
 
