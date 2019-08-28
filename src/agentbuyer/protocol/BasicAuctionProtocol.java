@@ -1,7 +1,7 @@
 package agentbuyer.protocol;
 
 import agentbuyer.auction.AuctionSubtype;
-import agentbuyer.auctiontasks.Auction;
+import agentbuyer.auctiontasks.BuyerAuction;
 import agentbuyer.auctiontasks.AuctionNegotiationTask;
 import agentbuyer.streamtasks.AuctionStream;
 import agentbuyer.streamtasks.CreateBasicStreamTask;
@@ -32,7 +32,7 @@ public class BasicAuctionProtocol implements AuctionProtocol {
 
     private String auctionStartMessage;
     private String buyerTopic;
-    private Auction auction;
+    private BuyerAuction auction;
     private long streamTime;
     private AuctionStream auctionStream;
 
@@ -42,7 +42,7 @@ public class BasicAuctionProtocol implements AuctionProtocol {
      * @param auctionSubtype auction subtype class
      * @param auction auction class
      */
-    public BasicAuctionProtocol(Properties properties, AuctionSubtype auctionSubtype, Auction auction) {
+    public BasicAuctionProtocol(Properties properties, AuctionSubtype auctionSubtype, BuyerAuction auction) {
 
         this.auction = auction;
         streamTime = Long.parseLong(properties.get(AuctionProperties.STREAM_TIME).toString());
@@ -103,8 +103,6 @@ public class BasicAuctionProtocol implements AuctionProtocol {
 
         auctionStream = new StdoutPrintStreamTask(streamTime);
 
-        System.setProperty("auction_uuid", UUID.randomUUID().toString());
-
 
 
 
@@ -127,6 +125,7 @@ public class BasicAuctionProtocol implements AuctionProtocol {
     //    ITask task10 = new TopicDeleteTask(taskExecutor,buyerTopic);
     //    ITask task11 = new TopicDeleteTask(taskExecutor, "input-" + buyerTopic);
     //    ITask task12 = new TopicDeleteTask(taskExecutor,"output-" + buyerTopic);
+        ITask task13 = new ProgramEndTask();
 
 
         taskExecutor.addTask(task1);
@@ -141,7 +140,7 @@ public class BasicAuctionProtocol implements AuctionProtocol {
    //     taskExecutor.addTask(task10);
    //     taskExecutor.addTask(task11);
    //     taskExecutor.addTask(task12);
-
+        taskExecutor.addTask(task13);
 
         taskExecutor.startTaskExecution();
 

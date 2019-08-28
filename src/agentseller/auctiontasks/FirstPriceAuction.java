@@ -5,6 +5,7 @@ import agents.AgentSeller;
 import help.AuctionMessage;
 import help.MessageBuilder;
 import kafka.MessageProducer;
+import program.Agent;
 
 
 /**
@@ -14,7 +15,7 @@ import kafka.MessageProducer;
  * @version 1.0
  * @since   16.6.2019
  */
-public class FirstPriceAuction extends Auction {
+public class FirstPriceAuction extends SellerAuction {
 
     private long waitTime;
 
@@ -41,7 +42,7 @@ public class FirstPriceAuction extends Auction {
     @Override
     public void onStart() {
 
-        AgentSeller.logger.info("Auction on start");
+        Agent.logger.info("HelperAuction on start");
 
 
     }
@@ -49,7 +50,7 @@ public class FirstPriceAuction extends Auction {
     @Override
     public void onEnd() {
 
-        AgentSeller.logger.info("Auction on end");
+        Agent.logger.info("HelperAuction on end");
 
 
     }
@@ -84,18 +85,18 @@ public class FirstPriceAuction extends Auction {
         if(auctionMessage.getHeader().equals("auction_end")){
 
 
-            AgentSeller.logger.info("Received message "  + " " + "SENDER: " + auctionMessage.getSender() + " " + " HEADER: " + auctionMessage.getHeader()
+            Agent.logger.info("Received message "  + " " + "SENDER: " + auctionMessage.getSender() + " " + " HEADER: " + auctionMessage.getHeader()
                     + " " + " CONTEXT: " + auctionMessage.getContext() + " " + " VALUE: " + auctionMessage.getValue() );
 
             if(auctionMessage.getValue().equals(getSellerUUID())) {
 
-                AgentSeller.logger.info( " AUCTION WINNER ");
+                Agent.logger.info( " AUCTION WINNER ");
                 System.out.println( " AUCTION WINNER ");
                 auctionNegotiationTask.done(true);
 
             }else{
 
-                AgentSeller.logger.info( " AUCTION LOSE ");
+                Agent.logger.info( " AUCTION LOSE ");
                 System.out.println( " AUCTION LOSE ");
                 auctionNegotiationTask.done(false);
 

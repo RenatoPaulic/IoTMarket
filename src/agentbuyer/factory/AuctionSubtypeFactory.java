@@ -7,7 +7,7 @@ import enums.AuctionSubtypes;
 import help.AreaDots;
 
 /**
- * Auction subtype factory class (for buyer)
+ * HelperAuction subtype factory class (for buyer)
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019

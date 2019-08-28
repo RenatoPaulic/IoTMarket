@@ -95,7 +95,7 @@ public class KafkaSubscribeTask extends Thread implements ITask, ISubscribeTask 
 
                 for (ConsumerRecord<String, String> record : records) {
 
-                    AuctionMessage auctionMessage = new AuctionMessage(record.value());
+                    AuctionMessage auctionMessage = new AuctionMessage(record.value(), record.topic());
 
                     // process only message that are important for conversation (only with right message mark)
                     if(Arrays.asList(marks).contains(auctionMessage.getMessageMark())) {

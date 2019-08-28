@@ -18,7 +18,7 @@ import java.util.TimerTask;
  * @version 1.0
  * @since   16.6.2019
  */
-public class DutchAuction extends Auction {
+public class DutchAuction extends BuyerAuction {
 
 
     private Timer timer;
@@ -48,7 +48,7 @@ public class DutchAuction extends Auction {
 
         this.roundTime = roundTime;
 
-        AgentBuyer.logger.info("Creating task: " + "Dutch auction");
+        Agent.logger.info("Creating task: " + "Dutch auction");
 
 
         this.minOffer = 0;
@@ -70,10 +70,10 @@ public class DutchAuction extends Auction {
         // if seller accepted offer - it is winning seller, pronounce winner
         if (auctionMessage.getValue().equals("Accept")) {
 
-            System.out.println("Auction ended in round " + round + " WINNER " + auctionMessage.getSender() + " with utility accepted " + (offer + step));
+            System.out.println("HelperAuction ended in round " + round + " WINNER " + auctionMessage.getSender() + " with utility accepted " + (offer + step));
 
             System.out.println("Buyer agent " + " --- WINNER --- " + auctionMessage.getSender() + " " + (offer + step));
-            AgentBuyer.logger.info("AUCTION WINNER " + auctionMessage.getSender() + " with utility " + (offer + step));
+            Agent.logger.info("AUCTION WINNER " + auctionMessage.getSender() + " with utility " + (offer + step));
 
             String mess = new MessageBuilder()
                     .addMark("B")

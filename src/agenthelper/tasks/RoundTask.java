@@ -14,6 +14,7 @@ import enums.AuctionSubtypes;
 import enums.AuctionTypes;
 import help.MessageBuilder;
 import kafka.MessageProducer;
+import program.Agent;
 import taskcontrol.basictasks.ISubscribeTask;
 import taskcontrol.basictasks.ITask;
 import taskcontrol.executors.TaskExecutor;
@@ -26,7 +27,7 @@ import java.util.Set;
 
 
 /**
- * Wrapper task class for Auction
+ * Wrapper task class for HelperAuction
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019
@@ -37,12 +38,12 @@ public class RoundTask implements ITask {
     private TaskExecutor taskExecutor;
     private ISubscribeTask subscribeTask;
     private AuctionContainer auctionContainer;
-    private Auction auction;
+    private HelperAuction auction;
 
     // bilo bi mozda bolje da ga prima kroz konstruktor aukciju koju sam vec napravio
     public RoundTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, AuctionContainer auctionContainer ) {
 
-        AgentHelper.logger.info("Creating task " + "Round Task");
+        Agent.logger.info("Creating task " + "Round Task");
 
 
         this.auctionContainer = auctionContainer;
@@ -58,7 +59,7 @@ public class RoundTask implements ITask {
 
     public void makeAuction() {
 
-        AgentHelper.logger.info("Task " + "Round Task - " + " on start ");
+        Agent.logger.info("Task " + "Round Task - " + " on start ");
 
         Properties properties = auctionContainer.getProperties();
         Set<HelperSensorSchema> dots = auctionContainer.getAllData();
@@ -111,7 +112,7 @@ public class RoundTask implements ITask {
 
 
 
-    public Auction getAuction() {
+    public HelperAuction getAuction() {
 
 
         return auction;

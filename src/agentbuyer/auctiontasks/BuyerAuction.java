@@ -11,12 +11,12 @@ import taskcontrol.basictasks.AuctionTask;
  * @version 1.0
  * @since   16.6.2019
  */
-public abstract class Auction implements AuctionTask {
+public abstract class BuyerAuction implements AuctionTask {
 
     AuctionNegotiationTask negTask;
     private long waitTime;
 
-    public Auction(long waitTime){
+    public BuyerAuction(long waitTime){
 
         this.waitTime = waitTime;
 

@@ -1,7 +1,7 @@
 package agents;
 
 import agentbuyer.auction.AuctionSubtype;
-import agentbuyer.auctiontasks.Auction;
+import agentbuyer.auctiontasks.BuyerAuction;
 import agentbuyer.factory.AuctionFactory;
 import agentbuyer.factory.AuctionSubtypeFactory;
 import agentbuyer.protocol.BasicAuctionProtocol;
@@ -21,6 +21,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * Class that represent agent buyer
@@ -31,29 +32,16 @@ import java.util.Properties;
 public class AgentBuyer implements AuctionAgent {
 
 
-    public static final Logger logger = Logger.getLogger(Class.class.getName());
-
-    static{
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh.mm.ss");
-        System.setProperty("current_date", dateFormat.format(new Date()));
-
-    }
-
 
     private String auctionTopic;
     private AuctionProtocol auctionProtocol;
 
     public AgentBuyer(AuctionProtocol auctionProtocol, String auctionTopic){
 
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL url = loader.getResource("log4j.properties");
-        PropertyConfigurator.configure(url);
-
-
         this.auctionTopic = auctionTopic;
         this.auctionProtocol = auctionProtocol;
 
-        Agent.logger.info("--------------------- STARTING BUYER AGENT ---------------------" );
+
 
 
     }
@@ -61,6 +49,7 @@ public class AgentBuyer implements AuctionAgent {
     @Override
     public void start(){
 
+        Agent.logger.info("--------------------- STARTING BUYER AGENT ---------------------" );
         Agent.logger.info("Buyer agent: Initializing auction tasks" );
         auctionProtocol.initAuctionBehaviors(auctionTopic);
 
@@ -85,6 +74,9 @@ public class AgentBuyer implements AuctionAgent {
      */
     private static Properties setUpDefaultParameters(String topic, AuctionTypes auctionType, AuctionSubtypes auctionSubtype, String deviceNumberFunction, String qualityFunction, int deviceNumberRestriction, int qualityRestriction, boolean helperFlag, int streamTime){
 
+        if(auctionSubtype.toString().equals("INFORMATION_AUCTION")){helperFlag=false;}
+
+
         Properties properties = new Properties();
 
         properties.put(AuctionProperties.TOPIC, topic);
@@ -97,18 +89,18 @@ public class AgentBuyer implements AuctionAgent {
         properties.put(AuctionProperties.HELPER_FLAG, helperFlag);
         properties.put(AuctionProperties.STREAM_TIME, streamTime);
 
-        logger.info("Creating Buyer agent");
-        logger.info("--------------------");
-        logger.info("Default parameters");
-        logger.info("Topic: " + properties.get(AuctionProperties.TOPIC));
-        logger.info("Auction type: " + properties.get(AuctionProperties.AUCTION_TYPE));
-        logger.info("Auction subtype: " + properties.get(AuctionProperties.AUCTION_SUBTYPE));
-        logger.info("Device number utility function: " + properties.get(AuctionProperties.DEVICE_NUM_FUNCTION));
-        logger.info("Quality utility function: " + properties.get(AuctionProperties.QUALITY_FUNCTION));
-        logger.info("Device number restriction: " + properties.get(AuctionProperties.DEVICE_NUM_RESTRICTION));
-        logger.info("Quality restriction: " + properties.get(AuctionProperties.QUALITY_RESTRICTION));
-        logger.info("Helper flag: " + properties.get(AuctionProperties.HELPER_FLAG));
-        logger.info("--------------------");
+        Agent.logger.info("Creating Buyer agent");
+        Agent.logger.info("--------------------");
+        Agent.logger.info("Default parameters");
+        Agent.logger.info("Topic: " + properties.get(AuctionProperties.TOPIC));
+        Agent.logger.info("HelperAuction type: " + properties.get(AuctionProperties.AUCTION_TYPE));
+        Agent.logger.info("HelperAuction subtype: " + properties.get(AuctionProperties.AUCTION_SUBTYPE));
+        Agent.logger.info("Device number utility function: " + properties.get(AuctionProperties.DEVICE_NUM_FUNCTION));
+        Agent.logger.info("Quality utility function: " + properties.get(AuctionProperties.QUALITY_FUNCTION));
+        Agent.logger.info("Device number restriction: " + properties.get(AuctionProperties.DEVICE_NUM_RESTRICTION));
+        Agent.logger.info("Quality restriction: " + properties.get(AuctionProperties.QUALITY_RESTRICTION));
+        Agent.logger.info("Helper flag: " + properties.get(AuctionProperties.HELPER_FLAG));
+        Agent.logger.info("--------------------");
 
         return properties;
 
@@ -123,12 +115,12 @@ public class AgentBuyer implements AuctionAgent {
      */
     public static AgentBuyer setUpBuyerAgent( String ... parameters){
 
+        System.setProperty("agent_name", "Buyer");
+        System.setProperty("auction_uuid", UUID.randomUUID().toString());
 
         Properties properties = setUpDefaultParameters(parameters[3], AuctionTypes.valueOf(parameters[4].toUpperCase()), AuctionSubtypes.valueOf(parameters[5].toUpperCase()), parameters[6], parameters[7],Integer.parseInt(parameters[8]), Integer.parseInt(parameters[9]), Boolean.parseBoolean(parameters[10]), Integer.parseInt(parameters[11]));
 
-
         Object[] auctionSubtypeObjectList = new Object[1];
-
 
         // for area auction set up coordinates in AreaDots class
         if(properties.get(AuctionProperties.AUCTION_SUBTYPE) == AuctionSubtypes.AREA_AUCTION){
@@ -142,13 +134,13 @@ public class AgentBuyer implements AuctionAgent {
 
             auctionSubtypeObjectList[0] = areaDots;
 
-            logger.info("--------------------");
-            logger.info("Specific parameters");
-            logger.info("Min x: " + minx);
-            logger.info("Max x: " + maxx);
-            logger.info("Min y: " + miny);
-            logger.info("Max y: " + maxy);
-            logger.info("--------------------");
+            Agent.logger.info("--------------------");
+            Agent.logger.info("Specific parameters");
+            Agent.logger.info("Min x: " + minx);
+            Agent.logger.info("Max x: " + maxx);
+            Agent.logger.info("Min y: " + miny);
+            Agent.logger.info("Max y: " + maxy);
+            Agent.logger.info("--------------------");
 
             // for information auction set up sensor description
         }else if(properties.get(AuctionProperties.AUCTION_SUBTYPE) == AuctionSubtypes.INFORMATION_AUCTION){
@@ -157,13 +149,12 @@ public class AgentBuyer implements AuctionAgent {
 
             auctionSubtypeObjectList[0] = description;
 
-            logger.info("--------------------");
-            logger.info("Specific parameters");
-            logger.info("Description: " + description);
-            logger.info("--------------------");
+            Agent.logger.info("--------------------");
+            Agent.logger.info("Specific parameters");
+            Agent.logger.info("Description: " + description);
+            Agent.logger.info("--------------------");
 
         }
-
 
         AuctionSubtype auctionSubtype =  AuctionSubtypeFactory.createAuctionSubtype((AuctionSubtypes) properties.get(AuctionProperties.AUCTION_SUBTYPE), auctionSubtypeObjectList);
 
@@ -211,7 +202,7 @@ public class AgentBuyer implements AuctionAgent {
         }
 
 
-        Auction auction = AuctionFactory.createAuction((AuctionTypes) properties.get(AuctionProperties.AUCTION_TYPE),  auctionObjectList);
+        BuyerAuction auction = AuctionFactory.createAuction((AuctionTypes) properties.get(AuctionProperties.AUCTION_TYPE),  auctionObjectList);
 
 
         AuctionProtocol auctionProtocol = new BasicAuctionProtocol(properties,auctionSubtype, auction);

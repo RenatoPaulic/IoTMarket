@@ -2,6 +2,7 @@ package agentbuyer.streamtasks;
 
 import agents.AgentBuyer;
 import help.AuctionMessage;
+import program.Agent;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,7 +20,7 @@ public class StdoutPrintStreamTask extends AuctionStream {
 
         super(activeTime);
 
-        AgentBuyer.logger.info("Creating task " + " Start Stream Task");
+        Agent.logger.info("Creating task " + " Start Stream Task");
 
 
     }
@@ -28,7 +29,7 @@ public class StdoutPrintStreamTask extends AuctionStream {
     @Override
     public void onStart() {
 
-        AgentBuyer.logger.info("Task " + " Start Stream Task" + " on start ");
+        Agent.logger.info("Task " + " Start Stream Task" + " on start ");
 
         Timer timer = new Timer();
 
@@ -49,7 +50,7 @@ public class StdoutPrintStreamTask extends AuctionStream {
     @Override
     public void onEnd() {
 
-        AgentBuyer.logger.info("Task " + " Start Stream Task" + " on end ");
+        Agent.logger.info("Task " + " Start Stream Task" + " on end ");
 
     }
 

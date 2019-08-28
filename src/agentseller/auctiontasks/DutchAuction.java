@@ -5,6 +5,7 @@ import agents.AgentSeller;
 import help.AuctionMessage;
 import help.MessageBuilder;
 import kafka.MessageProducer;
+import program.Agent;
 
 
 /**
@@ -14,7 +15,7 @@ import kafka.MessageProducer;
  * @version 1.0
  * @since   16.6.2019
  */
-public class DutchAuction extends Auction {
+public class DutchAuction extends SellerAuction {
 
     private long waitTime;
 
@@ -44,7 +45,7 @@ public class DutchAuction extends Auction {
     @Override
     public void onStart() {
 
-        AgentSeller.logger.info("Auction on start");
+        Agent.logger.info("HelperAuction on start");
 
         // get offer that will seller wait to accept
         wantedOffer = Double.parseDouble(getAuctionOffer("0"));
@@ -53,7 +54,7 @@ public class DutchAuction extends Auction {
     @Override
     public void onEnd() {
 
-        AgentSeller.logger.info("Auction on end");
+        Agent.logger.info("HelperAuction on end");
 
     }
 
@@ -94,14 +95,14 @@ public class DutchAuction extends Auction {
 
             if(auctionMessage.getValue().equals(getSellerUUID())) {
 
-                AgentSeller.logger.info( " AUCTION WIN ");
+                Agent.logger.info( " AUCTION WIN ");
                 System.out.println(" AUCTION WIN ");
 
                 auctionNegotiationTask.done(true);
 
             }else{
 
-                AgentSeller.logger.info( " AUCTION LOSE ");
+                Agent.logger.info( " AUCTION LOSE ");
                 System.out.println(" AUCTION LOSE ");
 
                 auctionNegotiationTask.done(false);

@@ -2,21 +2,21 @@ package agenthelper.factory;
 
 
 import agenthelper.auctionsubtype.AuctionSubtype;
-import agenthelper.tasks.Auction;
+import agenthelper.tasks.HelperAuction;
 import agenthelper.tasks.DutchAuction;
 import agenthelper.tasks.EnglishAuction;
 import agenthelper.tasks.FirstPriceAuction;
 import enums.AuctionTypes;
 
 /**
- * Auction factory class (for agent helper)
+ * HelperAuction factory class (for agent helper)
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019
  */
 public class AuctionFactory {
 
-    public static Auction createAuction(AuctionTypes type, Object[] parameters){
+    public static HelperAuction createAuction(AuctionTypes type, Object[] parameters){
 
 
         switch (type){

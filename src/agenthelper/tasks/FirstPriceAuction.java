@@ -3,10 +3,11 @@ package agenthelper.tasks;
 
 import agenthelper.auctionsubtype.AuctionSubtype;
 import agenthelper.helper.HelperSensorSchema;
-import agents.AgentHelper;
+
 import help.AuctionMessage;
 import help.MessageBuilder;
 import kafka.MessageProducer;
+import program.Agent;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @version 1.0
  * @since   16.6.2019
  */
-public class FirstPriceAuction extends Auction {
+public class FirstPriceAuction extends HelperAuction {
 
     private long waitTime;
 
@@ -44,7 +45,7 @@ public class FirstPriceAuction extends Auction {
     @Override
     public void onStart() {
 
-        AgentHelper.logger.info("Auction on start");
+        Agent.logger.info("HelperAuction on start");
 
 
     }
@@ -52,7 +53,7 @@ public class FirstPriceAuction extends Auction {
     @Override
     public void onEnd() {
 
-        AgentHelper.logger.info("Auction on end");
+        Agent.logger.info("HelperAuction on end");
 
 
     }
@@ -87,12 +88,12 @@ public class FirstPriceAuction extends Auction {
         if(auctionMessage.getHeader().equals("auction_end")){
 
 
-            AgentHelper.logger.info("Received message "  + " " + "SENDER: " + auctionMessage.getSender() + " " + " HEADER: " + auctionMessage.getHeader()
+            Agent.logger.info("Received message "  + " " + "SENDER: " + auctionMessage.getSender() + " " + " HEADER: " + auctionMessage.getHeader()
                     + " " + " CONTEXT: " + auctionMessage.getContext() + " " + " VALUE: " + auctionMessage.getValue() );
 
             if(auctionMessage.getValue().equals(getSellerUUID())) {
 
-                AgentHelper.logger.info( " AUCTION WINNER ");
+                Agent.logger.info( " AUCTION WINNER ");
                 System.out.println( " AUCTION WINNER ");
 
                 MessageBuilder messageBuilder = new MessageBuilder()
@@ -103,7 +104,7 @@ public class FirstPriceAuction extends Auction {
                         .addValuesForContexts("win");
 
 
-                AgentHelper.logger.info("Task " + " Auction Result Task " + " AUCTION WIN");
+                Agent.logger.info("Task " + " HelperAuction Result Task " + " AUCTION WIN");
 
 
                 List<HelperSensorSchema> sensorSchemaList =  getAuctionSubtype().getTmpOfferData();
@@ -127,7 +128,7 @@ public class FirstPriceAuction extends Auction {
 
             }else{
 
-                AgentHelper.logger.info( " AUCTION LOSE ");
+                Agent.logger.info( " AUCTION LOSE ");
                 System.out.println( " AUCTION LOSE ");
 
                 String mess = new MessageBuilder().addMark("H")

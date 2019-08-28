@@ -6,7 +6,7 @@ import taskcontrol.basictasks.ITask;
 import taskcontrol.executors.TaskExecutor;
 
 /**
- * Wrapper task class for Auction
+ * Wrapper task class for HelperAuction
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019
@@ -15,9 +15,9 @@ public class AuctionNegotiationTask implements ITask {
 
     private TaskExecutor taskExecutor;
     private ISubscribeTask subscribeTask;
-    private Auction auction;
+    private BuyerAuction auction;
 
-    public AuctionNegotiationTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, Auction auction){
+    public AuctionNegotiationTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, BuyerAuction auction){
 
         this.taskExecutor = taskExecutor;
         this.subscribeTask = subscribeTask;

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Auction strategy that randomly pick offer
+ * HelperAuction strategy that randomly pick offer
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019

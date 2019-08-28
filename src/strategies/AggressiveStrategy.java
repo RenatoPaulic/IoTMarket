@@ -3,7 +3,7 @@ package strategies;
 import java.util.List;
 
 /**
- * Auction strategy that pick offer with lowest utility for buyer
+ * HelperAuction strategy that pick offer with lowest utility for buyer
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019

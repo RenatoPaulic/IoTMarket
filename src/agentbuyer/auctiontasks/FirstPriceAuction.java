@@ -6,6 +6,7 @@ import agents.AgentBuyer;
 import help.AuctionMessage;
 import help.MessageBuilder;
 import kafka.MessageProducer;
+import program.Agent;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,7 +18,7 @@ import java.util.TimerTask;
  * @version 1.0
  * @since   16.6.2019
  */
-public class FirstPriceAuction extends Auction {
+public class FirstPriceAuction extends BuyerAuction {
 
     private String topic;
 
@@ -38,7 +39,7 @@ public class FirstPriceAuction extends Auction {
 
         this.auctionSubtype = auctionSubtype;
 
-        AgentBuyer.logger.info("Creating task " + " First price auction ");
+        Agent.logger.info("Creating task " + " First price auction ");
 
         this.topic = auctionSubtype.getAuctionUuid();
 
@@ -48,7 +49,7 @@ public class FirstPriceAuction extends Auction {
     @Override
     public void onStart() {
 
-        AgentBuyer.logger.info("Task " + " First price auction "  + " on start ");
+        Agent.logger.info("Task " + " First price auction "  + " on start ");
 
         Timer timer = new Timer();
 
@@ -96,7 +97,7 @@ public class FirstPriceAuction extends Auction {
                     Bid winningBid = auctionSubtype.getBestBid();
 
                     System.out.println("Buyer agent "+  " --- WINNER --- " + winningBid.getSellerUUID() + " " + winningBid.getUtility());
-                    AgentBuyer.logger.info("AUCTION WINNER " + winningBid.getSellerUUID() + " with utility " + winningBid.getUtility());
+                    Agent.logger.info("AUCTION WINNER " + winningBid.getSellerUUID() + " with utility " + winningBid.getUtility());
 
 
                     String mess = new MessageBuilder()
@@ -118,7 +119,7 @@ public class FirstPriceAuction extends Auction {
                 }else{
 
                     System.out.println("Buyer agent " + " --- WINNER --- " + " DON'T HAVE WINNER "  );
-                    AgentBuyer.logger.info("AUCTION WINNER " + " DON'T HAVE WINNER " );
+                    Agent.logger.info("AUCTION WINNER " + " DON'T HAVE WINNER " );
 
 
                     negTask.done(false);
@@ -150,7 +151,7 @@ public class FirstPriceAuction extends Auction {
     @Override
     public void onEnd() {
 
-        AgentBuyer.logger.info("Task " + " First price auction "  + " on end ");
+        Agent.logger.info("Task " + " First price auction "  + " on end ");
 
 
     }
@@ -163,7 +164,7 @@ public class FirstPriceAuction extends Auction {
 
             auctionSubtype.putBid(new Bid(auctionMessage.getSender(), Double.parseDouble(auctionMessage.getValueForContext("proposed_value"))));
 
-            AgentBuyer.logger.info("Task " + " First price auction "  + " received offer from " + auctionMessage.getSender() + " value " + auctionMessage.getValue());
+            Agent.logger.info("Task " + " First price auction "  + " received offer from " + auctionMessage.getSender() + " value " + auctionMessage.getValue());
 
         }
     }

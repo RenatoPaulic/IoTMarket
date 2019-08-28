@@ -1,6 +1,6 @@
 package agentseller.streamtasks;
 
-import agentseller.auctiontasks.Auction;
+import agentseller.auctiontasks.SellerAuction;
 import agentseller.datacenter.SensorSchema;
 import agents.AgentSeller;
 import enums.AuctionProperties;
@@ -18,7 +18,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Auction task that forwards stream data to input stream topic
+ * HelperAuction task that forwards stream data to input stream topic
  * as they arrive to system, for normal auction process
  * @author  Renato Paulić
  * @version 1.0
@@ -34,11 +34,11 @@ public class ProcessStreamTask implements ITask, AuctionTask {
 
     private long time;
 
-    private Auction auction;
+    private SellerAuction auction;
 
-    public ProcessStreamTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, Auction auction) {
+    public ProcessStreamTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, SellerAuction auction) {
 
-        AgentSeller.logger.info("Creating task " + " Process Stream Task ");
+        Agent.logger.info("Creating task " + " Process Stream Task ");
 
         this.taskExecutor = taskExecutor;
         this.subscribeTask = subscribeTask;
@@ -53,7 +53,7 @@ public class ProcessStreamTask implements ITask, AuctionTask {
     @Override
     public void onStart() {
 
-        AgentSeller.logger.info("Task " + " Process Stream Task " + " on start ");
+        Agent.logger.info("Task " + " Process Stream Task " + " on start ");
 
 
          List<SensorSchema> sensorSchemas = auction.getAuctionSubtype().getTmpOfferData();
@@ -94,7 +94,7 @@ public class ProcessStreamTask implements ITask, AuctionTask {
 
         if(auctionMessage.getHeader().equals("data")) {
 
-            AgentSeller.logger.info("Processing message " + auctionMessage.getValue() + " to stream topic " + topic);
+            Agent.logger.info("Processing message " + auctionMessage.getValue() + " to stream topic " + topic);
 
             String sensorId = auctionMessage.getValuesForSubcontext("sensor_data", "id").get(0);
 

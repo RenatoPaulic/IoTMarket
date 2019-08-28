@@ -26,7 +26,7 @@ public class CreateBasicStreamTask implements ITask {
 
         this.taskExecutor = taskExecutor;
 
-        AgentBuyer.logger.info("Creating task: " + "Create Stream Task");
+        Agent.logger.info("Creating task: " + "Create Stream Task");
 
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "Agent");
@@ -49,7 +49,7 @@ public class CreateBasicStreamTask implements ITask {
     @Override
     public void execute() {
 
-        AgentBuyer.logger.info("Task: " + " Create Stream Task "  + "starting stream ");
+        Agent.logger.info("Task: " + " Create Stream Task "  + "starting stream ");
 
         stream.start();
         taskExecutor.notifyTaskResult(true);

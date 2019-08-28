@@ -1,21 +1,21 @@
 package agentbuyer.factory;
 
 import agentbuyer.auction.AuctionSubtype;
-import agentbuyer.auctiontasks.Auction;
+import agentbuyer.auctiontasks.BuyerAuction;
 import agentbuyer.auctiontasks.DutchAuction;
 import agentbuyer.auctiontasks.EnglishAuction;
 import agentbuyer.auctiontasks.FirstPriceAuction;
 import enums.AuctionTypes;
 
 /**
- * Auction factory class (for buyer)
+ * HelperAuction factory class (for buyer)
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019
  */
 public class AuctionFactory {
 
-    public static Auction createAuction(AuctionTypes type, Object[] parameters)  {
+    public static BuyerAuction createAuction(AuctionTypes type, Object[] parameters)  {
 
 
         switch (type) {

@@ -5,6 +5,7 @@ import agents.AgentSeller;
 import help.AuctionMessage;
 import help.MessageBuilder;
 import kafka.MessageProducer;
+import program.Agent;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,9 +17,8 @@ import java.util.TimerTask;
  * @version 1.0
  * @since   16.6.2019
  */
-public class EnglishAuction extends Auction {
+public class EnglishAuction extends SellerAuction {
 
-    private double previousOffer = -1;
 
     private boolean roundInitFlag;
 
@@ -46,7 +46,6 @@ public class EnglishAuction extends Auction {
         Double highestUtility = Double.parseDouble(value);
         Double offer = auctionSubtype.getOffer(highestUtility);
 
-        previousOffer = offer;
         return offer.toString();
 
 
@@ -58,7 +57,7 @@ public class EnglishAuction extends Auction {
     @Override
     public void onStart() {
 
-        AgentSeller.logger.info("Auction on start ");
+        Agent.logger.info("HelperAuction on start ");
 
         // apply for auction sending auction_participation message
         String mess = new MessageBuilder()
@@ -78,8 +77,8 @@ public class EnglishAuction extends Auction {
             @Override
             public void run() {
 
-                AgentSeller.logger.warn("Timer ended " + " didn't receive auction message " + " auction passed - didn't participated");
-                AgentSeller.logger.info( " AUCTION LOSE ");
+                Agent.logger.warn("Timer ended " + " didn't receive auction message " + " auction passed - didn't participated");
+                Agent.logger.info( " AUCTION LOSE ");
 
                 System.out.println("AUCTION_LOSE");
 
@@ -92,7 +91,7 @@ public class EnglishAuction extends Auction {
     @Override
     public void onEnd() {
 
-        AgentSeller.logger.info("Auction on end");
+        Agent.logger.info("HelperAuction on end");
 
 
     }
@@ -117,8 +116,8 @@ public class EnglishAuction extends Auction {
             } else if (!roundInitFlag) {
 
                 timer.cancel();
-                System.out.println("Auction started " + "late participation " + "quiting");
-                AgentSeller.logger.info( " AUCTION LOSE " + "DIDNT'T PARTICIPATED");
+                System.out.println("HelperAuction started " + "late participation " + "quiting");
+                Agent.logger.info( " AUCTION LOSE " + "DIDNT'T PARTICIPATED");
 
                 auctionNegotiationTask.done(false);
             }
@@ -146,7 +145,7 @@ public class EnglishAuction extends Auction {
 
                     if (offer.equals("-1.0")) {
 
-                        AgentSeller.logger.info(" AUCTION LOSE ");
+                        Agent.logger.info(" AUCTION LOSE ");
                         System.out.println("AUCTION LOSE");
 
                         MessageProducer.getInstance().sendMessage(getBuyerUUID(), mess);
@@ -181,18 +180,18 @@ public class EnglishAuction extends Auction {
         // if auction_end message - see if winner
         if(auctionMessage.getHeader().equals("auction_end")){
 
-            AgentSeller.logger.info("Received message "  + " " + "SENDER: " + auctionMessage.getSender() + " " + " HEADER: " + auctionMessage.getHeader()
+            Agent.logger.info("Received message "  + " " + "SENDER: " + auctionMessage.getSender() + " " + " HEADER: " + auctionMessage.getHeader()
                     + " " + " CONTEXT: " + auctionMessage.getContext() + " " + " VALUE: " + auctionMessage.getValue() );
 
             if(auctionMessage.getValueForContext("auction_winner").equals(getSellerUUID())) {
 
-                AgentSeller.logger.info( " AUCTION WINNER ");
+                Agent.logger.info( " AUCTION WINNER ");
                 System.out.println("AUCTION_WIN");
                 auctionNegotiationTask.done(true);
 
             }else{
 
-                AgentSeller.logger.info( " AUCTION LOSE ");
+                Agent.logger.info( " AUCTION LOSE ");
                 System.out.println("AUCTION_LOSE");
                 auctionNegotiationTask.done(false);
             }

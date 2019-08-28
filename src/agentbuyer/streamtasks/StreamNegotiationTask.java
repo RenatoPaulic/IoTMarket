@@ -6,7 +6,7 @@ import taskcontrol.basictasks.ITask;
 import taskcontrol.executors.TaskExecutor;
 
 /**
- * Wrapper class for Auction Stream task
+ * Wrapper class for HelperAuction Stream task
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019

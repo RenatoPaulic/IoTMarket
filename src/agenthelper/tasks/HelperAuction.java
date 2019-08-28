@@ -1,9 +1,9 @@
-package agentseller.auctiontasks;
+package agenthelper.tasks;
 
-import agentseller.auction.AuctionSubtype;
-import enums.AuctionProperties;
+import agenthelper.auctionsubtype.AuctionSubtype;
 import taskcontrol.basictasks.AuctionTask;
 
+import java.util.Properties;
 
 /**
  * Abstract class that each auction must extend
@@ -13,25 +13,24 @@ import taskcontrol.basictasks.AuctionTask;
  * @version 1.0
  * @since   16.6.2019
  */
-public abstract class Auction implements AuctionTask {
+public abstract class HelperAuction implements AuctionTask {
 
     private String buyerUUID;
     private String sellerUUID;
     private String topic;
 
-    AuctionNegotiationTask auctionNegotiationTask;
+    private Properties properties;
+    RoundTask roundTask;
 
     AuctionSubtype auctionSubtype;
 
 
-    public Auction(String buuid, String suuid, AuctionSubtype auctionSubtype){
+    public HelperAuction(String buuid, String suuid, AuctionSubtype auctionSubtype){
 
         this.buyerUUID = buuid;
         this.sellerUUID = suuid;
         this.auctionSubtype = auctionSubtype;
-
-        topic = auctionSubtype.getProperties().get(AuctionProperties.TOPIC).toString();
-
+        properties = new Properties();
 
     }
 
@@ -41,15 +40,17 @@ public abstract class Auction implements AuctionTask {
     public void setSellerUUID(String sellerUUID) { this.sellerUUID = sellerUUID; }
     public String getTopic() { return topic; }
     public void setTopic(String topic) { this.topic = topic; }
+    public Properties getProperties(){ return  properties; }
+    public void setProperties(Properties properties){ this.properties = properties;}
 
 
     public abstract String getAuctionOffer(String value);
 
-    public void setAuctionNegotiationTask(AuctionNegotiationTask auctionNegotiationTask){
-        this.auctionNegotiationTask = auctionNegotiationTask;
+    public void setRoundTask(RoundTask roundTask){
+        this.roundTask = roundTask;
     }
 
-    public AuctionNegotiationTask getAuctionNegotiationTask(){ return auctionNegotiationTask; }
+    public RoundTask getRoundTask(){ return roundTask; }
 
     public AuctionSubtype getAuctionSubtype(){
         return auctionSubtype;

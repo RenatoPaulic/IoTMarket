@@ -1,7 +1,7 @@
 package agentseller.factory;
 
 
-import agentseller.auctiontasks.Auction;
+import agentseller.auctiontasks.SellerAuction;
 import agentseller.auctiontasks.DutchAuction;
 import agentseller.auctiontasks.EnglishAuction;
 import agentseller.auctiontasks.FirstPriceAuction;
@@ -10,14 +10,14 @@ import enums.AuctionTypes;
 
 
 /**
- * Auction factory class (for seller)
+ * HelperAuction factory class (for seller)
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019
  */
 public class AuctionFactory {
 
-    public static Auction createAuction(AuctionTypes type, Object[] parameters){
+    public static SellerAuction createAuction(AuctionTypes type, Object[] parameters){
 
 
         switch (type){

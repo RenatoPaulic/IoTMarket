@@ -6,6 +6,7 @@ import agents.AgentHelper;
 import help.AuctionMessage;
 import help.MessageBuilder;
 import kafka.MessageProducer;
+import program.Agent;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @version 1.0
  * @since   16.6.2019
  */
-public class DutchAuction extends Auction {
+public class DutchAuction extends HelperAuction {
 
     private long waitTime;
 
@@ -46,7 +47,7 @@ public class DutchAuction extends Auction {
     @Override
     public void onStart() {
 
-        AgentHelper.logger.info("Auction on start");
+        Agent.logger.info("HelperAuction on start");
 
         // get offer that will seller wait to accept
         wantedOffer = Double.parseDouble(getAuctionOffer("0"));
@@ -58,7 +59,7 @@ public class DutchAuction extends Auction {
     @Override
     public void onEnd() {
 
-        AgentHelper.logger.info("Auction on end");
+        Agent.logger.info("HelperAuction on end");
 
     }
 
@@ -101,7 +102,7 @@ public class DutchAuction extends Auction {
 
             if(auctionMessage.getValue().equals(getSellerUUID())) {
 
-                AgentHelper.logger.info( " AUCTION WIN ");
+                Agent.logger.info( " AUCTION WIN ");
                 System.out.println(" AUCTION WIN ");
 
                 MessageBuilder messageBuilder = new MessageBuilder()
@@ -112,7 +113,7 @@ public class DutchAuction extends Auction {
                         .addValuesForContexts("win");
 
 
-                AgentHelper.logger.info("Task " + " Auction Result Task " + " AUCTION WIN");
+                Agent.logger.info("Task " + " HelperAuction Result Task " + " AUCTION WIN");
 
 
                 List<HelperSensorSchema> sensorSchemaList =  getAuctionSubtype().getTmpOfferData();
@@ -135,7 +136,7 @@ public class DutchAuction extends Auction {
                 roundTask.done(true);
             }else{
 
-                AgentHelper.logger.info( " AUCTION LOSE ");
+                Agent.logger.info( " AUCTION LOSE ");
                 System.out.println(" AUCTION LOSE ");
 
                 String mess = new MessageBuilder().addMark("H")

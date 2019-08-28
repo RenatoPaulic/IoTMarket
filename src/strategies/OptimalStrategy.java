@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /**
- * Auction strategy that pick offer based on data center rating
+ * HelperAuction strategy that pick offer based on data center rating
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019

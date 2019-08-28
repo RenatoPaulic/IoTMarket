@@ -31,35 +31,21 @@ import java.util.List;
  */
 public class AgentHelper implements AuctionAgent {
 
-    public static final Logger logger = Logger.getLogger(Class.class.getName());
-
-    static{
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh.mm.ss");
-        System.setProperty("current_date", dateFormat.format(new Date()));
-
-    }
-
-
     private List<String> topicList;
 
 
 
     public AgentHelper( List<String> topicList ){
 
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL url = loader.getResource("log4j.properties");
-        PropertyConfigurator.configure(url);
-
         this.topicList = topicList;
-
-
-        Agent.logger.info("Helper agent " + "starting");
 
     }
 
 
     @Override
     public void start(){
+
+        Agent.logger.info("--------------------- STARTING HELPER AGENT ---------------------" );
 
         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
@@ -80,6 +66,8 @@ public class AgentHelper implements AuctionAgent {
      * @return AgentHelper class
      */
     public static AgentHelper setUpHelperAgent(String[] args){
+
+        System.setProperty("agent_name", "Helper");
 
         List<String> topicList = new ArrayList<>();
 

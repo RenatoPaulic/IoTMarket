@@ -6,7 +6,6 @@ import agentseller.datacenter.DataCenter;
 import agentseller.datacenter.DataGroup;
 import agentseller.factory.AuctionFactory;
 import agentseller.factory.AuctionSubtypeFactory;
-import agents.AgentSeller;
 import agentseller.streamtasks.ProcessHelperStreamTask;
 import agentseller.streamtasks.ProcessStreamTask;
 import agentseller.streamtasks.StreamListenerTask;
@@ -18,6 +17,7 @@ import help.AreaDots;
 import help.AuctionMessage;
 import help.MessageBuilder;
 import help.Operations;
+import program.Agent;
 import taskcontrol.basictasks.ISubscribeTask;
 import taskcontrol.basictasks.ITask;
 import taskcontrol.basictasks.KafkaSubscribeTask;
@@ -40,10 +40,10 @@ import java.util.UUID;
 public class AuctionStartThread extends Thread {
 
     private AuctionMessage auctionMessage;
-    private List<Auction> auctions;
+    private List<SellerAuction> auctions;
 
 
-    public AuctionStartThread(AuctionMessage auctionMessage, List<Auction> auctions){
+    public AuctionStartThread(AuctionMessage auctionMessage, List<SellerAuction> auctions){
 
         this.auctionMessage = auctionMessage;
         this.auctions = auctions;
@@ -61,19 +61,23 @@ public class AuctionStartThread extends Thread {
         // get corresponding DataGroup for given topic
         DataGroup dataGroup = DataCenter.getInstance().getDataGroupByTopic(auctionMessage.getTopic());
 
+        System.out.println("Data group: " + dataGroup.getTopic());
 
-        AgentSeller.logger.info("Creating Buyer agent");
-        AgentSeller.logger.info("--------------------");
-        AgentSeller.logger.info("Default parameters");
-        AgentSeller.logger.info("Topic: " + properties.get(AuctionProperties.TOPIC));
-        AgentSeller.logger.info("Auction type: " + properties.get(AuctionProperties.AUCTION_TYPE));
-        AgentSeller.logger.info("Auction subtype: " + properties.get(AuctionProperties.AUCTION_SUBTYPE));
-        AgentSeller.logger.info("Device number utility function: " + properties.get(AuctionProperties.DEVICE_NUM_FUNCTION));
-        AgentSeller.logger.info("Quality utility function: " + properties.get(AuctionProperties.QUALITY_FUNCTION));
-        AgentSeller.logger.info("Device number restriction: " + properties.get(AuctionProperties.DEVICE_NUM_RESTRICTION));
-        AgentSeller.logger.info("Quality restriction: " + properties.get(AuctionProperties.QUALITY_RESTRICTION));
-        AgentSeller.logger.info("Helper flag: " + properties.get(AuctionProperties.HELPER_FLAG));
-        AgentSeller.logger.info("--------------------");
+        System.out.println("Topic: " + auctionMessage.getTopic());
+
+
+        Agent.logger.info("Auction parameters");
+        Agent.logger.info("--------------------");
+        Agent.logger.info("Default parameters");
+        Agent.logger.info("Topic: " + properties.get(AuctionProperties.TOPIC));
+        Agent.logger.info("HelperAuction type: " + properties.get(AuctionProperties.AUCTION_TYPE));
+        Agent.logger.info("HelperAuction subtype: " + properties.get(AuctionProperties.AUCTION_SUBTYPE));
+        Agent.logger.info("Device number utility function: " + properties.get(AuctionProperties.DEVICE_NUM_FUNCTION));
+        Agent.logger.info("Quality utility function: " + properties.get(AuctionProperties.QUALITY_FUNCTION));
+        Agent.logger.info("Device number restriction: " + properties.get(AuctionProperties.DEVICE_NUM_RESTRICTION));
+        Agent.logger.info("Quality restriction: " + properties.get(AuctionProperties.QUALITY_RESTRICTION));
+        Agent.logger.info("Helper flag: " + properties.get(AuctionProperties.HELPER_FLAG));
+        Agent.logger.info("--------------------");
 
 
         AuctionSubtype auctionSubtype = null;
@@ -118,11 +122,11 @@ public class AuctionStartThread extends Thread {
 
             Object parameterList[] = {auctionMessage.getSender(), sellerUUID, auctionSubtype, waitTime};
 
-            Auction auction = AuctionFactory.createAuction((AuctionTypes) properties.get(AuctionProperties.AUCTION_TYPE), parameterList);
+            SellerAuction auction = AuctionFactory.createAuction((AuctionTypes) properties.get(AuctionProperties.AUCTION_TYPE), parameterList);
 
             if (auctions.add(auction)) {
 
-                AgentSeller.logger.info("Seller agent " + " Auction: " + auction.getBuyerUUID() + " " + "added");
+                Agent.logger.info("Seller agent " + " Auction: " + auction.getBuyerUUID() + " " + "added");
                 System.out.println("Seller agent " + " Auction: " + auction.getBuyerUUID() + " " + "added");
 
                 setUpAuctionNegotiationProtocol(auction);
@@ -130,16 +134,17 @@ public class AuctionStartThread extends Thread {
             }
 
 
+
         // if not ask helper for help
         } else if (Boolean.parseBoolean((String) properties.get(AuctionProperties.HELPER_FLAG)) && (properties.get(AuctionProperties.AUCTION_SUBTYPE) == AuctionSubtypes.AREA_AUCTION)) {
 
-            AgentSeller.logger.info("Seller agent " + " Cant start agentseller.auction alone");
+            Agent.logger.info("Seller agent " + " Cant start auction alone");
 
             String helperTopic = "H-" + auctionMessage.getSender();
 
             AreaAuction areaAuction = (AreaAuction) auctionSubtype;
 
-            System.out.println("Ajmo " + areaAuction.getSensorsInArea());
+            System.out.println("Sensors in area " + areaAuction.getSensorsInArea());
 
             String mess = new MessageBuilder()
                     .addMark("S")
@@ -150,7 +155,7 @@ public class AuctionStartThread extends Thread {
                     .build()
                     .toString();
 
-            setUpHelperNegotiationProtocol(helperTopic, sellerUUID, areaAuction, mess);
+            setUpHelperNegotiationProtocol(helperTopic, sellerUUID, areaAuction, mess, auctionMessage.getValuesForSubcontext("auction_parameters", "wait_time").get(0));
 
 
 
@@ -158,7 +163,8 @@ public class AuctionStartThread extends Thread {
         } else {
 
 
-            System.out.println("Task " + "TASK_NAME" + " agentseller.auction flag for agentseller.auction " + auctionMessage.getSender() + " is disabled - can't communicate with SHmutual.helper and can't participate in agentseller.auction");
+            System.out.println("Task " + "TASK_NAME" + " auction flag for auction " + auctionMessage.getSender() + " is disabled - can't communicate with helper and can't participate in auction");
+
 
 
         }
@@ -170,7 +176,7 @@ public class AuctionStartThread extends Thread {
      * Method witch sets up auction negotiation protocol
      * @param auction
      */
-    private void setUpAuctionNegotiationProtocol(Auction auction){
+    private void setUpAuctionNegotiationProtocol(SellerAuction auction){
 
         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
@@ -197,15 +203,15 @@ public class AuctionStartThread extends Thread {
      * @param areaAuction AreaAuction
      * @param mess init message
      */
-    private void setUpHelperNegotiationProtocol(String helperTopic, String sellerUUID, AreaAuction areaAuction, String mess){
+    private void setUpHelperNegotiationProtocol(String helperTopic, String sellerUUID, AreaAuction areaAuction, String mess, String waitTime){
 
 
         TaskExecutor taskExecutor = new SequentialTaskExecutor();
 
-        ITask task0 = new StreamListenerTask(taskExecutor, "Pollution");
+        ITask task0 = new StreamListenerTask(taskExecutor, auctionMessage.getTopic());
         ITask task1 = new KafkaSubscribeTask(taskExecutor,  helperTopic, OffsetStart.EARLIEST, "H");
         ITask task2 = new MessageSendTask(taskExecutor, helperTopic, mess);
-        ITask task3 = new HelperNegotiationTask( taskExecutor, (ISubscribeTask) task1, sellerUUID, areaAuction.getSensorsInArea());
+        ITask task3 = new HelperNegotiationTask( taskExecutor, (ISubscribeTask) task1, sellerUUID, areaAuction.getSensorsInArea(), Long.parseLong(waitTime));
         ITask task4 = new ProcessHelperStreamTask(taskExecutor, (ISubscribeTask) task0, (HelperNegotiationTask) task3, auctionMessage.getSender(), 20000);
 
         taskExecutor.addTask(task0);

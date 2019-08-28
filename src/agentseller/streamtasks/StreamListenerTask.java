@@ -6,6 +6,7 @@ import agentseller.datacenter.SensorSchema;
 import agents.AgentSeller;
 import help.AuctionMessage;
 import help.MessageBuilder;
+import program.Agent;
 import taskcontrol.basictasks.AuctionTask;
 import taskcontrol.basictasks.ISubscribeTask;
 import taskcontrol.basictasks.ITask;
@@ -33,7 +34,7 @@ public class StreamListenerTask extends Thread implements ITask, ISubscribeTask 
 
     public StreamListenerTask(TaskExecutor taskExecutor, String topic){
 
-        AgentSeller.logger.info("Creating task " + " Stream Listener Task ");
+        Agent.logger.info("Creating task " + " Stream Listener Task ");
 
         random = new Random();
 

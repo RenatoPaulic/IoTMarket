@@ -3,20 +3,15 @@ package agenthelper.tasks;
 
 
 import agenthelper.helper.AuctionContainer;
-import agenthelper.helper.HelperProperties;
-import agents.AgentHelper;
-import enums.OffsetStart;
 import help.AuctionMessage;
-import help.Operations;
 import program.Agent;
 import taskcontrol.basictasks.*;
-import taskcontrol.executors.SequentialTaskExecutor;
 import taskcontrol.executors.TaskExecutor;
 
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.Properties;
+import java.util.UUID;
 
 
 /**
@@ -44,7 +39,7 @@ public class MainLoopTask implements AuctionTask, ITask {
 
         auctionContainers = new ArrayList<>();
 
-        AgentHelper.logger.info("Creating task " + " Main Listener Task ");
+        Agent.logger.info("Creating task " + " Main Listener Task ");
 
 
     }
@@ -53,13 +48,13 @@ public class MainLoopTask implements AuctionTask, ITask {
     @Override
     public void onStart() {
 
-        AgentHelper.logger.info("Task " + " Main Listener Task " + " on start ");
+        Agent.logger.info("Task " + " Main Listener Task " + " on start ");
     }
 
     @Override
     public void onEnd() {
 
-        AgentHelper.logger.info("Task " + " Main Listener Task " + " on end ");
+        Agent.logger.info("Task " + " Main Listener Task " + " on end ");
 
     }
 
@@ -70,10 +65,13 @@ public class MainLoopTask implements AuctionTask, ITask {
 
             Agent.logger.info("Task " + " Main Listener Task " + " received auction_start message for auction " + auctionMessage.getSender() );
 
-            System.out.println("auction start messa d");
 
             if(Boolean.parseBoolean(auctionMessage.getValuesForSubcontext("basic_parameters", "HELPER_FLAG").get(0))) {
 
+                System.setProperty("auction_uuid", UUID.randomUUID().toString());
+                new HelpStartThread(auctionMessage).start();
+
+                /*
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -108,6 +106,8 @@ public class MainLoopTask implements AuctionTask, ITask {
 
                     }
                 }).start();
+
+                */
 
             }else{
 

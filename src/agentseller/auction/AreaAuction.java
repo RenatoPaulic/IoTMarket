@@ -42,7 +42,7 @@ public class AreaAuction extends AuctionSubtype {
         this.areaDots = areaDots;
         sensorsInArea = getDataFromArea();
 
-        System.out.println("ajmo 2 " + sensorsInArea);
+        System.out.println("Sensors in area " + sensorsInArea);
 
 
         utilityContainers = new ArrayList<>();
@@ -291,7 +291,7 @@ public class AreaAuction extends AuctionSubtype {
                 // check if sensor is in area
                 if (sensor.getLatitude() >= areaDots.getMin_x() && sensor.getLatitude() <= areaDots.getMax_x() && sensor.getLongitude() >= areaDots.getMin_y() && sensor.getLongitude() <= areaDots.getMax_y()) {
                     sensorsInArea.add(sensorSchema);
-                    System.out.println("vba " + sensor.getSensorId() + " " + sensor.getLongitude() + " " + sensor.getLongitude());
+                    System.out.println("sensor " + sensor.getSensorId() + " " + sensor.getLongitude() + " " + sensor.getLongitude());
                 }
             }
         }

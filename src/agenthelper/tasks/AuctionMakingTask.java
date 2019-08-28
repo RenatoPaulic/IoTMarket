@@ -34,7 +34,7 @@ public class AuctionMakingTask implements AuctionTask, ITask {
 
     public AuctionMakingTask(AuctionContainer auctionContainer, TaskExecutor taskExecutor, ISubscribeTask subscribeTask, long time){
 
-        AgentHelper.logger.info("Creating task " + " Auction Making Task ");
+        Agent.logger.info("Creating task " + " HelperAuction Making Task ");
 
         this.taskExecutor = taskExecutor;
         this.subscribeTask = subscribeTask;
@@ -47,7 +47,7 @@ public class AuctionMakingTask implements AuctionTask, ITask {
     @Override
     public void onStart() {
 
-        AgentHelper.logger.info("Task " + " Auction Making Task " + " on start ");
+        Agent.logger.info("Task " + " HelperAuction Making Task " + " on start ");
 
 
     }
@@ -55,7 +55,7 @@ public class AuctionMakingTask implements AuctionTask, ITask {
     @Override
     public void onEnd() {
 
-        AgentHelper.logger.info("Task " + " Auction Making Task " + " on end ");
+        Agent.logger.info("Task " + " HelperAuction Making Task " + " on end ");
 
 
 
@@ -68,7 +68,7 @@ public class AuctionMakingTask implements AuctionTask, ITask {
         // if hello_helper message and there is space for more sensors in cooperation
         if(auctionMessage.getHeader().equals("hello_helper") && !auctionContainer.isFull()){
 
-            Agent.logger.info("Task " + " Auction Making Task " + " received help message from seller " + auctionMessage.getSender());
+            Agent.logger.info("Task " + " HelperAuction Making Task " + " received help message from seller " + auctionMessage.getSender());
 
             int numOfSensorsToAdd = Integer.parseInt(auctionMessage.getValueForContext("num_of_sensors"));
 
@@ -135,7 +135,7 @@ public class AuctionMakingTask implements AuctionTask, ITask {
 
             auctionContainer.addData(receivedSensors);
 
-             Agent.logger.info("Task " + " Auction Making Task " + " received data from seller " + auctionMessage.getSender() + " " + auctionContainer.getAllData());
+             Agent.logger.info("Task " + " HelperAuction Making Task " + " received data from seller " + auctionMessage.getSender() + " " + auctionContainer.getAllData());
 
              // jos za testiranje
              for(SensorSchema sensorSchema : receivedSensors){

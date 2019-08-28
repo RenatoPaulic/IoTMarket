@@ -392,7 +392,7 @@ public class SqlLiteConnection implements DatabaseConnection {
 
         List<SensorSchema> sensorSchemas = new ArrayList<>();
 
-        String sql = "SELECT data_schema.sensor_id AS id , price, quality FROM VIRTUAL_SENSOR_CON JOIN DATA_SCHEMA ON virtual_sensor_con.sensor_id = data_schema.sensor_id  WHERE virtual_sensor_con.data_center_id = " + DataCenter.getInstance().getDatacenterId() + " AND virtual_sensor_id = '" + id + "'" ;
+        String sql = "SELECT data_schema.sensor_id AS id, price, quality, type FROM VIRTUAL_SENSOR_CON JOIN DATA_SCHEMA ON virtual_sensor_con.sensor_id = data_schema.sensor_id  WHERE virtual_sensor_con.data_center_id = " + DataCenter.getInstance().getDatacenterId() + " AND virtual_sensor_id = '" + id + "'" ;
 
         try (Connection conn = getConnection();
              Statement stmt  = conn.createStatement();

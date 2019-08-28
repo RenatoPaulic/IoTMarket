@@ -1,8 +1,7 @@
 package agentseller.auctiontasks;
 
-
-import agents.AgentSeller;
 import help.AuctionMessage;
+import program.Agent;
 import taskcontrol.basictasks.AuctionTask;
 import taskcontrol.basictasks.ISubscribeTask;
 import taskcontrol.basictasks.ITask;
@@ -10,6 +9,7 @@ import taskcontrol.executors.TaskExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -22,7 +22,7 @@ import java.util.List;
 public class MainListenerTask implements AuctionTask, ITask {
 
 
-    protected List<Auction> auctions;
+    protected List<SellerAuction> auctions;
 
     private TaskExecutor taskExecutor;
     private ISubscribeTask subscribeTask;
@@ -36,7 +36,7 @@ public class MainListenerTask implements AuctionTask, ITask {
 
         auctions = new ArrayList<>();
 
-        AgentSeller.logger.info("Creating task " + " Main Listener Task " );
+        Agent.logger.info("Creating task " + " Main Listener Task " );
 
     }
 
@@ -46,13 +46,13 @@ public class MainListenerTask implements AuctionTask, ITask {
     @Override
     public void onStart() {
 
-        AgentSeller.logger.info("Task " + " Main Listener Task "  + " on start ");
+        Agent.logger.info("Task " + " Main Listener Task "  + " on start ");
     }
 
     @Override
     public void onEnd() {
 
-        AgentSeller.logger.info("Task " + " Main Listener Task "  + " on end ");
+        Agent.logger.info("Task " + " Main Listener Task "  + " on end ");
 
     }
 
@@ -62,6 +62,7 @@ public class MainListenerTask implements AuctionTask, ITask {
         // if auction_start message - calculate utilities and check participation (in  new thread)
         if (auctionMessage.getHeader().equals("auction_start")) {
 
+            System.setProperty("auction_uuid", auctionMessage.getSender());
             new AuctionStartThread(auctionMessage, auctions).start();
 
         }
@@ -70,7 +71,7 @@ public class MainListenerTask implements AuctionTask, ITask {
         // if auction_end message - remove auction from auctions list
         if(auctionMessage.getHeader().equals("auction_end")) {
 
-                for(Auction auction : auctions){
+                for(SellerAuction auction : auctions){
 
                     if (auction.getBuyerUUID().equals(auctionMessage.getSender())){
 
@@ -88,7 +89,7 @@ public class MainListenerTask implements AuctionTask, ITask {
         }
 
 
-    public void removeAuction(Auction auction){
+    public void removeAuction(SellerAuction auction){
 
         auctions.remove(auction);
 

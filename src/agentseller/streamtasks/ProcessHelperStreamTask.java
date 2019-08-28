@@ -5,6 +5,7 @@ import agentseller.auctiontasks.HelperNegotiationTask;
 import agents.AgentSeller;
 import help.AuctionMessage;
 import kafka.MessageProducer;
+import program.Agent;
 import taskcontrol.basictasks.AuctionTask;
 import taskcontrol.basictasks.ISubscribeTask;
 import taskcontrol.basictasks.ITask;
@@ -15,7 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Auction task that forwards stream data to input stream topic
+ * HelperAuction task that forwards stream data to input stream topic
  * as they arrive to system, for cooperating auction process
  * @author  Renato Paulić
  * @version 1.0
@@ -37,7 +38,7 @@ public class ProcessHelperStreamTask implements ITask, AuctionTask {
 
     public ProcessHelperStreamTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, HelperNegotiationTask helperTask, String topic, long time) {
 
-        AgentSeller.logger.info("Creating task " + " Process Helper Stream Task");
+        Agent.logger.info("Creating task " + " Process Helper Stream Task");
 
         this.taskExecutor = taskExecutor;
         this.subscribeTask = subscribeTask;
@@ -50,7 +51,7 @@ public class ProcessHelperStreamTask implements ITask, AuctionTask {
     @Override
     public void onStart() {
 
-        AgentSeller.logger.info("Task " + " Process Helper Stream Task " + " on start ");
+        Agent.logger.info("Task " + " Process Helper Stream Task " + " on start ");
 
         winingSensorsIDS = helperTask.getWinningSensorsIDs();
 
@@ -77,7 +78,7 @@ public class ProcessHelperStreamTask implements ITask, AuctionTask {
     @Override
     public void onEnd() {
 
-        AgentSeller.logger.info("Task " + " Process Helper Stream Task " + " on end ");
+        Agent.logger.info("Task " + " Process Helper Stream Task " + " on end ");
 
     }
 

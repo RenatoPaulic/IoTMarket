@@ -2,7 +2,6 @@ package agentbuyer.auctiontasks;
 
 import agentbuyer.auction.AuctionSubtype;
 import agentbuyer.auction.Bid;
-import agents.AgentBuyer;
 import help.AuctionMessage;
 import help.MessageBuilder;
 import kafka.MessageProducer;
@@ -18,7 +17,7 @@ import java.util.*;
  * @version 1.0
  * @since   16.6.2019
  */
-public class EnglishAuction extends Auction {
+public class EnglishAuction extends BuyerAuction {
 
     private Set<String> sellerUUIDList;
 
@@ -58,7 +57,7 @@ public class EnglishAuction extends Auction {
         this.auctionSubtype = auctionSubtype;
 
 
-        AgentBuyer.logger.info("Creating task: " + " English auction ");
+        Agent.logger.info("Creating task: " + " English auction ");
 
     }
 
@@ -78,7 +77,7 @@ public class EnglishAuction extends Auction {
                     timer.cancel();
                 }
 
-                AgentBuyer.logger.info("Task " + " English auction " + " Round ended when all participants applied");
+                Agent.logger.info("Task " + " English auction " + " Round ended when all participants applied");
 
                 pronaunceRoundWinner();
 
@@ -106,7 +105,7 @@ public class EnglishAuction extends Auction {
 
         inGameSellers = new HashSet<>();
 
-        AgentBuyer.logger.warn("Buyer Agent "  + " -------------------------------------------------------- Starting Round " + round + " ----------------------------------------------------------------------");
+        Agent.logger.info("Buyer Agent "  + " -------------------------------------------------------- Starting Round " + round + " ----------------------------------------------------------------------");
         System.out.println("Buyer agent "  + " -------------------------------------------------------- Starting Round " + round + " ----------------------------------------------------------------------");
 
         timer = new Timer();
@@ -116,7 +115,7 @@ public class EnglishAuction extends Auction {
 
                 @Override
                 public void run() {
-                    Agent.logger.warn("Task " + " English auction " + " Round ended form timer ");
+                    Agent.logger.info("Task " + " English auction " + " Round ended form timer ");
                     pronaunceRoundWinner();
                 }
 

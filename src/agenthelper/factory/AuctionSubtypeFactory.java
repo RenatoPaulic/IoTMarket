@@ -12,7 +12,7 @@ import java.util.Properties;
 
 
 /**
- * Auction subtype factory class (for agent helper)
+ * HelperAuction subtype factory class (for agent helper)
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019

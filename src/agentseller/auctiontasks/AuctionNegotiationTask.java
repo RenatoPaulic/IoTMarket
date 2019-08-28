@@ -2,7 +2,7 @@ package agentseller.auctiontasks;
 
 import agentseller.datacenter.DataCenter;
 import agentseller.datacenter.SensorSchema;
-import agents.AgentSeller;
+import program.Agent;
 import taskcontrol.basictasks.ISubscribeTask;
 import taskcontrol.basictasks.ITask;
 import taskcontrol.executors.TaskExecutor;
@@ -10,20 +10,20 @@ import taskcontrol.executors.TaskExecutor;
 import java.util.List;
 
 /**
- * Wrapper class for Auction task
+ * Wrapper class for HelperAuction task
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019
  */
 public class AuctionNegotiationTask implements ITask {
 
-        private Auction auction;
+        private SellerAuction auction;
         private TaskExecutor taskExecutor;
         private ISubscribeTask subscribeTask;
 
-        public AuctionNegotiationTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, Auction auction){
+        public AuctionNegotiationTask(TaskExecutor taskExecutor, ISubscribeTask subscribeTask, SellerAuction auction){
 
-            AgentSeller.logger.info("Creating task " + " Auction Negotiation Task");
+            Agent.logger.info("Creating task " + " Auction Negotiation Task");
 
             this.auction = auction;
 
@@ -58,7 +58,7 @@ public class AuctionNegotiationTask implements ITask {
 
 
 
-    public Auction getAuction(){
+    public SellerAuction getAuction(){
 
             return auction;
 

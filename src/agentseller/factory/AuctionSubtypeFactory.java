@@ -11,7 +11,7 @@ import strategies.AuctionStrategy;
 import java.util.Properties;
 
 /**
- * Auction subtype factory class (for seller)
+ * HelperAuction subtype factory class (for seller)
  * @author  Renato Paulić
  * @version 1.0
  * @since   16.6.2019
